@@ -1,6 +1,7 @@
 import React from "react"; 
 import List from "./List"; 
 import STORE from './STORE';
+import { listenerCount } from "cluster";
 
 
 class App extends React.Component { 
@@ -24,16 +25,58 @@ class App extends React.Component {
       }
     
     })
+  
       
      
     this.setState({
 
         lists: remainingLists 
      })
+    }
+ 
+  newRandomCard= () => {
+    const newId = Math.random().toString(36).substring(2, 4)
+      + Math.random().toString(36).substring(2, 4);
+    return {
+      newId,
+      title: `Random Card ${newId}`,
+      content: 'lorem ipsum'
+    }
+   
+  }
+
+  handleNewCard = (listId, newId) => {
+    const { lists } = this.state;
+    const addedCardList = lists.map(list => {
+      if (list.id === listId) {
+        // cardIds.push(newId)
+      let newList = Object.assign({}, list, {cardIds: cardIds.push(newId)})
+      let newAllCardsList = Object.assign({}, allCards, { id: newId })
+       return newList, newAllCardsList
+      } else {
+        return list
+      }
+    
+  })
+
+    this.setState({
+      lists: addedCardList,
+      allCards: newAllCardsList
+
+    })
   }
 
 
 
+//New state needs new card to allcards and new id to cardIds in appropriate 
+
+  
+  
+
+
+  
+
+  
   render() { 
     return (  
       <main className="App"> 
@@ -49,12 +92,17 @@ class App extends React.Component {
               cards={list.cardIds.map(id => this.state.allCards[id])}
               handleClick={this.handleDelete}
               listId={list.id}
+              handleRandom={this.handleRandom}
+              newCardId={newId}
+              handleNewCard={this.handleNewCard}
+              handleNewCard2={this.handleNewCard2}
+              
             />
           ))}
           </div>
         </main>
       );
     }
-}
 
+  }
 export default App 
