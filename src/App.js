@@ -5,14 +5,30 @@ import STORE from './STORE';
 
 class App extends React.Component { 
   
-    state = STORE
+    state = {
+      lists: STORE.lists,
+      allCards: STORE.allCards,
+    }
   
-   handleDelete = (id) => {
-    const remainingCards = this.state.lists.map((list, i) => 
-    (list.cardIds.filter(id => this.state.allCards[id] !== id )))
-       
-     this.setState({
-        allCards: remainingCards
+   handleDelete = (listId,id) => {
+    const { lists } = this.state;
+    const remainingLists = lists.map(list => {
+      if (list.id === listId){
+      let modifiedArray= list.cardIds.filter(cardId => cardId !== id)
+        let newList = Object.assign({}, list, {cardIds: modifiedArray})
+        //so that we dont mutate the object
+        // we  want to loop through card id's
+        return newList;
+      }else {
+        return list;
+      }
+    
+    })
+      
+     
+    this.setState({
+
+        lists: remainingLists 
      })
   }
 
@@ -32,6 +48,7 @@ class App extends React.Component {
               header={list.header}
               cards={list.cardIds.map(id => this.state.allCards[id])}
               handleClick={this.handleDelete}
+              listId={list.id}
             />
           ))}
           </div>
