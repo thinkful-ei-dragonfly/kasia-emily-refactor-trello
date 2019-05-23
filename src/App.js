@@ -1,7 +1,7 @@
 import React from "react"; 
 import List from "./List"; 
 import STORE from './STORE';
-import { listenerCount } from "cluster";
+// import { listenerCount } from "cluster";
 
 
 class App extends React.Component { 
@@ -45,36 +45,28 @@ class App extends React.Component {
    
   }
 
-  handleNewCard = (listId, newId) => {
+  handleNewCard = (listId) => {
     const { lists } = this.state;
+    const newCard = this.newRandomCard();
     const addedCardList = lists.map(list => {
       if (list.id === listId) {
         // cardIds.push(newId)
-      let newList = Object.assign({}, list, {cardIds: cardIds.push(newId)})
-      let newAllCardsList = Object.assign({}, allCards, { id: newId })
-       return newList, newAllCardsList
+      let newList = Object.assign({}, list, {cardIds: [...list.cardIds, newCard.id]})
+      return newList
       } else {
         return list
       }
     
   })
-
+  
     this.setState({
       lists: addedCardList,
-      allCards: newAllCardsList
+      allCards: {
+        ...this.state.allCards, [newCard.id]:newCard,
+      }
 
     })
   }
-
-
-
-//New state needs new card to allcards and new id to cardIds in appropriate 
-
-  
-  
-
-
-  
 
   
   render() { 
@@ -92,10 +84,8 @@ class App extends React.Component {
               cards={list.cardIds.map(id => this.state.allCards[id])}
               handleClick={this.handleDelete}
               listId={list.id}
-              handleRandom={this.handleRandom}
-              newCardId={newId}
               handleNewCard={this.handleNewCard}
-              handleNewCard2={this.handleNewCard2}
+              
               
             />
           ))}
