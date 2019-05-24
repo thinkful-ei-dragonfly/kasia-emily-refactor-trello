@@ -35,11 +35,11 @@ class App extends React.Component {
     }
  
   newRandomCard= () => {
-    const newId = Math.random().toString(36).substring(2, 4)
+    const id = Math.random().toString(36).substring(2, 4)
       + Math.random().toString(36).substring(2, 4);
     return {
-      newId,
-      title: `Random Card ${newId}`,
+      id,
+      title: `Random Card ${id}`,
       content: 'lorem ipsum'
     }
    
